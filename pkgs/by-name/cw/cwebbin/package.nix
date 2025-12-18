@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchurl,
   tie,
+  aflplusplus,
 }:
 
 let
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     substituteInPlace cweav-patch.ch --replace ' ("__DATE__", "__TIME__")' ""
   '';
 
-  nativeBuildInputs = [ tie ];
+  nativeBuildInputs = [ tie aflplusplus ];
 
   makefile = "Makefile.unix";
 
@@ -51,7 +52,8 @@ stdenv.mkDerivation rec {
     "RM=rm"
     "PDFTEX=echo"
     # requires __structuredAttrs = true
-    "CC=$(CXX) -std=c++14"
+    "CC=${aflplusplus}/bin/afl-clang-lto++ -std=c++14"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
 
   buildFlags = [
