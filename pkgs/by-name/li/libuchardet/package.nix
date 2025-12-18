@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake aflplusplus ];
-
   cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=OFF"
     "-DCMAKE_C_COMPILER=${aflplusplus}/bin/afl-clang-lto"
     "-DCMAKE_CXX_COMPILER=${aflplusplus}/bin/afl-clang-lto++"
   ];
