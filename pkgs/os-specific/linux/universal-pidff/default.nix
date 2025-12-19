@@ -4,14 +4,24 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "universal-pidff";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "JacKeTUs";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     repo = "universal-pidff";
     tag = version;
     hash = "sha256-qjnQTkQiufHPEwMH+F+XE+VBc/DSTX6d0vxot35xbUc=";

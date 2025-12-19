@@ -3,6 +3,7 @@
   lib,
   oracle-instantclient,
   php,
+  aflplusplus,
 }:
 
 let
@@ -24,12 +25,19 @@ let
       };
 in
 buildPecl {
+  __structuredAttrs = true;
+
   pname = "oci8";
 
   inherit (versionData) version sha256;
 
   buildInputs = [ oracle-instantclient ];
-  configureFlags = [ "--with-oci8=shared,instantclient,${oracle-instantclient.lib}/lib" ];
+
+  nativeBuildInputs = [ aflplusplus ];
+  configureFlags = [ "--with-oci8=shared,instantclient,${oracle-instantclient.lib}/lib" 
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
 
   postPatch = ''
     sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${oracle-instantclient.dev}/include"|' config.m4

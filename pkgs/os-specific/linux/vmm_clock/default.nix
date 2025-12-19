@@ -4,14 +4,24 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "vmm_clock";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "voutilad";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     repo = "vmm_clock";
     rev = version;
     hash = "sha256-XYRxrVixvImxr2j3qxBcv1df1LvPRKqKKgegW3HqUcQ=";

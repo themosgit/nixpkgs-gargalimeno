@@ -16,12 +16,15 @@
   ffmpeg,
   libavif,
   libheif,
+  aflplusplus,
 }:
 
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 in
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "libaom";
   version = "3.12.1";
 
@@ -44,13 +47,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    yasm
+  nativeBuildInputs = [ yasm
     perl
     cmake
     pkg-config
-    python3
-  ];
+    python3 aflplusplus ];
 
   propagatedBuildInputs = lib.optional enableVmaf libvmaf;
 
@@ -87,6 +88,9 @@ stdenv.mkDerivation rec {
     # armv7l-hf-multiplatform does not support NEON
     # see lib/systems/platform.nix
     "-DENABLE_NEON=0"
+    "-DBUILD_SHARED_LIBS=OFF"
+    "-DCMAKE_C_COMPILER=${aflplusplus}/bin/afl-clang-lto"
+    "-DCMAKE_CXX_COMPILER=${aflplusplus}/bin/afl-clang-lto++"
   ];
 
   postFixup = ''

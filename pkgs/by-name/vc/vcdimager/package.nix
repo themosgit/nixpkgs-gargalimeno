@@ -8,9 +8,12 @@
   libxml2,
   popt,
   libiconv,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "vcdimager";
   version = "2.0.1";
 
@@ -27,7 +30,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
 
   buildInputs = [
     libxml2

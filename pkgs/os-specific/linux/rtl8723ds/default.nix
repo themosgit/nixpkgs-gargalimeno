@@ -4,14 +4,19 @@
   fetchFromGitHub,
   kernel,
   bc,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "rtl8723ds";
   version = "${kernel.version}-unstable-2023-11-14";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
+
+  nativeBuildInputs = [ aflplusplus ];
     repo = "rtl8723ds";
     rev = "52e593e8c889b68ba58bd51cbdbcad7fe71362e4";
     sha256 = "sha256-SszvDuWN9opkXyVQAOLjnNtPp93qrKgnGvzK0y7Y9b0=";
@@ -26,6 +31,8 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+      "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
 
   postPatch = ''

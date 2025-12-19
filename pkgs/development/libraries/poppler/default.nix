@@ -43,6 +43,7 @@
   scribus,
   vips,
   testers,
+  aflplusplus,
 }:
 
 let
@@ -82,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!minimal) [
     glib # for glib-mkenums
+    aflplusplus
   ];
 
   buildInputs = [
@@ -133,6 +135,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals finalAttrs.finalPackage.doCheck [
     "-DTESTDATADIR=${testData}"
+    "-DBUILD_SHARED_LIBS=OFF"
+    "-DCMAKE_C_COMPILER=${aflplusplus}/bin/afl-clang-lto"
+    "-DCMAKE_CXX_COMPILER=${aflplusplus}/bin/afl-clang-lto++"
   ];
   disallowedReferences = lib.optional finalAttrs.finalPackage.doCheck testData;
 

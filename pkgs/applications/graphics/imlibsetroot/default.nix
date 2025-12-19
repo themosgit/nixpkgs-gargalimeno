@@ -5,9 +5,12 @@
   libX11,
   libXinerama,
   imlib2,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "imlibsetroot";
   version = "1.2";
   src = fetchurl {
@@ -20,6 +23,13 @@ stdenv.mkDerivation {
     imlib2
     libXinerama
   ];
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
 
   buildPhase = ''
     runHook preBuild

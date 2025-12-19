@@ -5,14 +5,24 @@
   fetchpatch2,
   kernel,
   kernelModuleMakeFlags,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "gasket";
   version = "1.0-18-unstable-2024-04-25";
 
   src = fetchFromGitHub {
     owner = "google";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     repo = "gasket-driver";
     rev = "5815ee3908a46a415aac616ac7b9aedcb98a504c";
     sha256 = "O17+msok1fY5tdX1DvqYVw6plkUDF25i8sqwd6mxYf8=";

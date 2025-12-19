@@ -4,6 +4,7 @@
   fetchurl,
   unzip,
   graylogPackage,
+  aflplusplus,
 }:
 
 let
@@ -29,7 +30,12 @@ let
       // {
         inherit installPhase;
         dontUnpack = true;
-        nativeBuildInputs = [ unzip ];
+        nativeBuildInputs = [ unzip aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
         meta = a.meta // {
           platforms = graylogPackage.meta.platforms;
           sourceProvenance = with sourceTypes; [ binaryBytecode ];

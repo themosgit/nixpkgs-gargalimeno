@@ -4,14 +4,24 @@
   kernel,
   kernelModuleMakeFlags,
   lib,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "vendor-reset";
   version = "unstable-2024-04-16-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "gnif";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     repo = "vendor-reset";
     rev = "084881c6e9e11bdadaf05798e669568848e698a3";
     hash = "sha256-Klu2uysbF5tH7SqVl815DwR7W+Vx6PyVDDLwoMZiqBI=";

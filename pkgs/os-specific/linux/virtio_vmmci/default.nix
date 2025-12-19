@@ -4,14 +4,24 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   name = "virtio_vmmci";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "voutilad";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     repo = "virtio_vmmci";
     rev = version;
     hash = "sha256-h8yu4+vTgpAD+sKa1KnVD+qubiIlkYtG2nmQnXOi/sk=";

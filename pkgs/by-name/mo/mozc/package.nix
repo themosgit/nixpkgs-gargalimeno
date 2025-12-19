@@ -12,12 +12,15 @@
   jp-zip-codes,
   dictionaries ? [ ],
   merge-ut-dictionaries,
+  aflplusplus,
 }:
 
 let
   ut-dictionary = merge-ut-dictionaries.override { inherit dictionaries; };
 in
 buildBazelPackage rec {
+  __structuredAttrs = true;
+
   pname = "mozc";
   version = "2.30.5544.102"; # make sure to update protobuf if needed
 
@@ -29,11 +32,9 @@ buildBazelPackage rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    qt6.wrapQtAppsHook
+  nativeBuildInputs = [ qt6.wrapQtAppsHook
     pkg-config
-    unzip
-  ];
+    unzip aflplusplus ];
 
   buildInputs = [
     ibus

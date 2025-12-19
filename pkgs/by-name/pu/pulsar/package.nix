@@ -32,6 +32,7 @@
   copyDesktopItems,
   asar,
   python3,
+  aflplusplus,
 }:
 
 let
@@ -85,6 +86,8 @@ let
   ) hunspellDirs;
 in
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   inherit pname version;
 
   src =
@@ -94,11 +97,14 @@ stdenv.mkDerivation {
       inherit hash;
     };
 
-  nativeBuildInputs = [
-    wrapGAppsHook3
+  nativeBuildInputs = [ wrapGAppsHook3
     copyDesktopItems
-    asar
+    asar aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
 
   buildInputs = [
     gtk3

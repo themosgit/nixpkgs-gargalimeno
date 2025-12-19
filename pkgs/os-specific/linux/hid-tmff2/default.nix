@@ -5,14 +5,24 @@
   kernel,
   kernelModuleMakeFlags,
   unstableGitUpdater,
+  aflplusplus,
 }:
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "hid-tmff2";
   # https://github.com/Kimplul/hid-tmff2/blob/ca168637fbfb085ebc9ade0c47fa0653dac5d25b/dkms/dkms-install.sh#L12
   version = "0-unstable-2025-12-01";
 
   src = fetchFromGitHub {
     owner = "Kimplul";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     repo = "hid-tmff2";
     rev = "c4b70d4ec36404c9454199bec208eaf3116ef453";
     hash = "sha256-IYfDlKfd4OL7s+MJPNYJ/tpyTiKHy1DQGQaIR7qfzZU=";

@@ -6,9 +6,12 @@
   lib,
   fetchzip,
   dos2unix,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "ax99100";
   version = "2.3.0";
 
@@ -20,6 +23,13 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://www.asix.com.tw/en/support/download/file/1956";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     sha256 = "sha256-acvKb+ohOFrfytgHp9KUVivqDRvgsFgK8bxxHkIh8PU=";
     extension = "tar.bz2";
   };

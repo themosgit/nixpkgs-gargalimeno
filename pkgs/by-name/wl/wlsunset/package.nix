@@ -9,9 +9,12 @@
   scdoc,
   wayland,
   wayland-protocols,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "wlsunset";
   version = "0.4.0";
 
@@ -26,13 +29,16 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [
     pkg-config
   ];
-  nativeBuildInputs = [
-    meson
+  nativeBuildInputs = [ meson
     pkg-config
     ninja
     wayland-scanner
-    scdoc
-  ];
+    scdoc aflplusplus ];
+  preConfigure = ''
+    export CC="${aflplusplus}/bin/afl-clang-lto"
+    export CXX="${aflplusplus}/bin/afl-clang-lto++"
+  '';
+
   buildInputs = [
     wayland
     wayland-protocols

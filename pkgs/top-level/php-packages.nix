@@ -43,6 +43,7 @@
   uwimap,
   valgrind,
   zlib,
+  aflplusplus,
 }:
 
 lib.makeScope pkgs.newScope (
@@ -130,13 +131,11 @@ lib.makeScope pkgs.newScope (
 
           enableParallelBuilding = true;
 
-          nativeBuildInputs = [
-            php.unwrapped
+          nativeBuildInputs = [ php.unwrapped
             autoconf
             pkg-config
             re2c
-            bison
-          ];
+            bison aflplusplus ];
 
           inherit
             configureFlags
@@ -342,13 +341,18 @@ lib.makeScope pkgs.newScope (
             callPackage ../development/php-packages/pdo_oci { }
           else
             buildPecl rec {
+  __structuredAttrs = true;
+
               inherit (php.unwrapped) src version;
 
               pname = "pdo_oci";
               sourceRoot = "php-${version}/ext/pdo_oci";
 
               buildInputs = [ pkgs.oracle-instantclient ];
-              configureFlags = [ "--with-pdo-oci=instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
+              configureFlags = [ "--with-pdo-oci=instantclient,${pkgs.oracle-instantclient.lib}/lib" 
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
 
               internalDeps = [ php.extensions.pdo ];
               postPatch = ''

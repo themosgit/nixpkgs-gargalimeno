@@ -7,9 +7,12 @@
   ldc,
   zlib,
   lz4,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "sambamba";
   version = "1.0.1";
 
@@ -21,19 +24,21 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    which
+  nativeBuildInputs = [ which
     python3
-    ldc
+    ldc aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
   buildInputs = [
     zlib
     lz4
   ];
 
   buildFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+    ];
 
   # Upstream's install target is broken; copy manually
   installPhase = ''

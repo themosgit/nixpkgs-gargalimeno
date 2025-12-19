@@ -8,6 +8,7 @@
   bluez,
   nixosTests,
   nix-update-script,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,6 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
   buildInputs = [ bluez ];
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
 
   makeFlags = kernelModuleMakeFlags ++ [
     "-C"

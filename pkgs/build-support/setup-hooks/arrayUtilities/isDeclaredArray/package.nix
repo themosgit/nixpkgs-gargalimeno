@@ -1,6 +1,7 @@
 {
   callPackages,
   makeSetupHook,
+  aflplusplus,
 }:
 makeSetupHook {
   name = "isDeclaredArray";

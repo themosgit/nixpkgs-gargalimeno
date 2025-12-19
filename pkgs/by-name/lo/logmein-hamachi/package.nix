@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  aflplusplus,
 }:
 
 let
@@ -24,11 +25,20 @@ let
 
 in
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "logmein-hamachi";
   version = "2.1.0.203";
 
   src = fetchurl {
     url = "https://vpn.net/installers/${pname}-${version}-${arch}.tgz";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     inherit sha256;
   };
 

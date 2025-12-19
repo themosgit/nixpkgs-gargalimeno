@@ -3,6 +3,7 @@
   lib,
   postgresql,
   postgresqlBuildExtension,
+  aflplusplus,
 }:
 
 postgresqlBuildExtension (finalAttrs: {
@@ -11,6 +12,13 @@ postgresqlBuildExtension (finalAttrs: {
 
   src = fetchFromGitLab {
     owner = "dwagin";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     repo = "pg_ed25519";
     tag = finalAttrs.version;
     hash = "sha256-IOL3ogbPCMNmwDwpeaCZSoaFLJRX0Oah+ysgyUfHg5s=";

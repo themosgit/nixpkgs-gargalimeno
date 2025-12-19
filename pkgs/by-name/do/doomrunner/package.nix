@@ -3,6 +3,7 @@
   stdenv,
   kdePackages,
   fetchFromGitHub,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,13 +19,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ kdePackages.qtbase ];
 
-  nativeBuildInputs = [
-    kdePackages.qmake
-    kdePackages.wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ kdePackages.qmake
+    kdePackages.wrapQtAppsHook aflplusplus ];
 
   makeFlags = [
     "INSTALL_ROOT=${placeholder "out"}"
+      "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
 
   postInstall =

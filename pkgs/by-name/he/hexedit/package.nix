@@ -4,6 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   ncurses,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fIgPbr7qmxyEga2YaAD0+NBM8LeDm/tVAq99ub7aiAI=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook aflplusplus ];
+  configureFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
   buildInputs = [ ncurses ];
 
   meta = {

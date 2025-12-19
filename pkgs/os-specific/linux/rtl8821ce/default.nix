@@ -6,6 +6,7 @@
   kernelModuleMakeFlags,
   bc,
   nix-update-script,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,6 +15,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     repo = "rtl8821ce";
     rev = "4e6b887f0d8c4091a4df9da9fcead9a8294b41ad";
     hash = "sha256-fY0j6VzwAIsD62+snAWfIgGXcwne0mOwIE/Yh25lwTY=";

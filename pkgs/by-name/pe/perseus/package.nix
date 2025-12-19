@@ -3,12 +3,20 @@
   stdenv,
   fetchurl,
   unzip,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "perseus";
   version = "4-beta";
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
 
   hardeningDisable = [ "stackprotector" ];
 

@@ -41,9 +41,12 @@
   perl,
   fontconfig,
   intltool,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "cinelerra-cv";
   version = "2.3-unstable-2025-01-25";
 
@@ -67,14 +70,17 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [
-    automake
+  nativeBuildInputs = [ automake
     autoconf
     libtool
     pkg-config
     file
-    intltool
+    intltool aflplusplus ];
+  configureFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
 
   buildInputs = [
     faad2

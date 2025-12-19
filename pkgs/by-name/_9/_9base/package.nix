@@ -9,6 +9,8 @@
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "9base";
   version = "unstable-2019-09-11";
 
@@ -40,7 +42,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config aflplusplus ];
   env.NIX_CFLAGS_COMPILE = toString [
     # workaround build failure on -fno-common toolchains like upstream
     # gcc-10. Otherwise build fails as:
@@ -55,6 +57,8 @@ stdenv.mkDerivation {
   env.LDFLAGS = lib.optionalString enableStatic "-static";
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+      "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
   installFlags = [
     "PREFIX_TROFF=${placeholder "troff"}"

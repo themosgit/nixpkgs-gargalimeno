@@ -3,9 +3,12 @@
   stdenv,
   fetchgit,
   autoreconfHook,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "libnova";
   version = "0.16";
 
@@ -16,9 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "0icwylwkixihzni0kgl0j8dx3qhqvym6zv2hkw2dy6v9zvysrb1b";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
+  nativeBuildInputs = [ autoreconfHook aflplusplus ];
+  configureFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
 
   meta = {
     description = "Celestial Mechanics, Astrometry and Astrodynamics Library";

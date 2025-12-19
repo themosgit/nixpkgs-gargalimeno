@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  aflplusplus,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xone";
@@ -11,6 +12,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "dlundqvist";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     repo = "xone";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Ca7JsyFGsi6iiNusbEgIGc3jHeNLBwKKYzqcm3O6GxU=";

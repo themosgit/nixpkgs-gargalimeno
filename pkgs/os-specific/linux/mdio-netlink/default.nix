@@ -3,9 +3,12 @@
   stdenv,
   kernel,
   mdio-tools,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "mdio-netlink";
   version = "${mdio-tools.version}-${kernel.version}";
 

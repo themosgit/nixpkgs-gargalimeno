@@ -8,6 +8,7 @@
   patches,
   srcs,
   pkgsHostTarget,
+  aflplusplus,
 }:
 
 let
@@ -29,6 +30,13 @@ mkDerivation (
     patches = (args.patches or [ ]) ++ (patches.${pname} or [ ]);
 
     buildInputs = args.buildInputs or [ ];
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
 
     nativeBuildInputs =
       (args.nativeBuildInputs or [ ])

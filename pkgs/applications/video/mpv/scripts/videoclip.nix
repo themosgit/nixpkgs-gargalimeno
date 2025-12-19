@@ -7,6 +7,7 @@
   stdenv,
   buildLua,
   unstableGitUpdater,
+  aflplusplus,
 }:
 buildLua {
   pname = "videoclip";
@@ -14,6 +15,13 @@ buildLua {
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     repo = "videoclip";
     rev = "1c6531b649d3ee526cc7aa360e726aeedf43beb9";
     hash = "sha256-lBXlvFrDC1Drz5JIiI6488UoFsXz18LAxqRpQmy1G0k=";

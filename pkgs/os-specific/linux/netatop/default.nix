@@ -7,6 +7,7 @@
   kernelModuleMakeFlags,
   kmod,
   zlib,
+  aflplusplus,
 }:
 
 let
@@ -14,6 +15,8 @@ let
 in
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "netatop";
   inherit version;
   name = "netatop-${kernel.version}-${version}";
@@ -28,6 +31,13 @@ stdenv.mkDerivation {
     kmod
     zlib
   ];
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
 
   hardeningDisable = [ "pic" ];
 
@@ -52,8 +62,7 @@ stdenv.mkDerivation {
     "KMODDIRVERSION=${kernel.modDirVersion}"
     # netatop builds both the module and daemon at once, and the daemon needs a wrapped cc to build
     # pkgs/os-specific/linux/kernel/common-flags.nix unwraps the cc for kernel build, but we need the wrapped one
-    "CC=${stdenv.cc}/bin/cc"
-  ];
+    ];
 
   meta = {
     description = "Network monitoring module for atop";

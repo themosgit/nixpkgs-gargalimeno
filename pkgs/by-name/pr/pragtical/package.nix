@@ -19,6 +19,7 @@
   sdl3,
   xz,
   zlib,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -64,12 +65,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    lua5_4 # needed for built-time lua bytecode generation
+  nativeBuildInputs = [ lua5_4 # needed for built-time lua bytecode generation
     meson
     ninja
-    pkg-config
-  ];
+    pkg-config aflplusplus ];
+  preConfigure = ''
+    export CC="${aflplusplus}/bin/afl-clang-lto"
+    export CXX="${aflplusplus}/bin/afl-clang-lto++"
+  '';
+
 
   buildInputs = [
     freetype

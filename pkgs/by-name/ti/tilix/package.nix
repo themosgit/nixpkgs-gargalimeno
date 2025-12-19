@@ -18,6 +18,7 @@
   libunwind,
   appstream,
   nixosTests,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,16 +37,19 @@ stdenv.mkDerivation (finalAttrs: {
     "debugoptimized"
   ];
 
-  nativeBuildInputs = [
-    desktop-file-utils
+  nativeBuildInputs = [ desktop-file-utils
     ldc
     meson
     ninja
     pkg-config
     python3
     wrapGAppsHook3
-    appstream
-  ];
+    appstream aflplusplus ];
+  preConfigure = ''
+    export CC="${aflplusplus}/bin/afl-clang-lto"
+    export CXX="${aflplusplus}/bin/afl-clang-lto++"
+  '';
+
 
   buildInputs = [
     dbus

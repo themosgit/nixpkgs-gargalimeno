@@ -4,6 +4,7 @@ bcachefs-tools:
   stdenv,
   kernelModuleMakeFlags,
   kernel,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
@@ -13,6 +14,13 @@ stdenv.mkDerivation {
   __structuredAttrs = true;
 
   src = bcachefs-tools.dkms;
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

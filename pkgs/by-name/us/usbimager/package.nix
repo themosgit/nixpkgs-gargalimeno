@@ -10,9 +10,12 @@
   udisks,
   glib,
   libX11,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "usbimager";
   version = "1.0.10";
 
@@ -25,10 +28,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/src";
 
-  nativeBuildInputs = [
-    pkg-config
-    wrapGAppsHook3
-  ];
+  nativeBuildInputs = [ pkg-config
+    wrapGAppsHook3 aflplusplus ];
   buildInputs =
     lib.optionals withUdisks [
       udisks
@@ -62,7 +63,10 @@ stdenv.mkDerivation rec {
     description = "Very minimal GUI app that can write compressed disk images to USB drives";
     homepage = "https://gitlab.com/bztsrc/usbimager";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ vdot0x23 ];
+    maintainers = with lib.maintainers; [ vdot0x23 
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
     # windows and darwin could work, but untested
     # feel free add them if you have a machine to test
     platforms = with lib.platforms; linux;

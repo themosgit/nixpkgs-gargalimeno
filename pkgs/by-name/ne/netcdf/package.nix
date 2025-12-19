@@ -13,12 +13,15 @@
   m4,
   curl, # for DAP
   removeReferencesTo,
+  aflplusplus,
 }:
 
 let
   inherit (hdf5) mpiSupport mpi;
 in
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
   version = "4.9.3";
 
@@ -40,11 +43,9 @@ stdenv.mkDerivation rec {
       --replace '#!/bin/bash' '${stdenv.shell}'
   '';
 
-  nativeBuildInputs = [
-    m4
+  nativeBuildInputs = [ m4
     removeReferencesTo
-    libxml2 # xml2-config
-  ];
+    libxml2 # xml2-config aflplusplus ];
 
   buildInputs = [
     curl
@@ -77,12 +78,14 @@ stdenv.mkDerivation rec {
   ]
   ++ (lib.optionals mpiSupport [
     "--enable-parallel-tests"
-    "CC=${lib.getDev mpi}/bin/mpicc"
-  ]);
+    ]);
 
   enableParallelBuilding = true;
 
-  disallowedReferences = [ stdenv.cc ];
+  disallowedReferences = [ stdenv.cc 
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
 
   postFixup = ''
     remove-references-to -t ${stdenv.cc} "$(readlink -f $out/lib/libnetcdf.settings)"

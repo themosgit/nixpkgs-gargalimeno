@@ -3,9 +3,12 @@
   stdenv,
   fetchFromGitHub,
   getent,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "papirus-folders";
   version = "1.14.0";
 
@@ -20,7 +23,12 @@ stdenv.mkDerivation rec {
     getent
   ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  nativeBuildInputs = [ aflplusplus ];
+
+  makeFlags = [ "PREFIX=${placeholder "out"}" 
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
 
   patchPhase = ''
     substituteInPlace ./papirus-folders --replace "getent" "${getent}/bin/getent"

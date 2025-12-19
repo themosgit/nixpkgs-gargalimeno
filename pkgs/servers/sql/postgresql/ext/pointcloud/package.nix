@@ -16,6 +16,7 @@
   sphinx,
   which,
   zlib,
+  aflplusplus,
 }:
 postgresqlBuildExtension (finalAttrs: {
   pname = "pointcloud";
@@ -33,8 +34,7 @@ postgresqlBuildExtension (finalAttrs: {
     hash = "sha256-uFbScxq21kt0jOjjyfMeO3i+bG2/kWS/Rrt3ZpOqEns=";
   };
 
-  nativeBuildInputs = [
-    autoconf
+  nativeBuildInputs = [ autoconf
     automake
     installShellFiles
     libtool
@@ -42,8 +42,7 @@ postgresqlBuildExtension (finalAttrs: {
     # for doc
     sphinx
     # needed by the configure phase
-    which
-  ];
+    which aflplusplus ];
 
   buildInputs = [
     zlib
@@ -66,6 +65,8 @@ postgresqlBuildExtension (finalAttrs: {
 
   configureFlags = [
     (lib.withFeatureAs true "xml2config" (lib.getExe' (lib.getDev libxml2) "xml2-config"))
+      "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
 
   postInstall = ''

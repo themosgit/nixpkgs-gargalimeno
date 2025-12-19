@@ -4,17 +4,27 @@
   fetchFromGitHub,
   nix-update-script,
   php,
+  aflplusplus,
 }:
 
 let
   version = "0.19.0";
 in
 buildPecl {
+  __structuredAttrs = true;
+
   pname = "vld";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "derickr";
+
+  nativeBuildInputs = [ aflplusplus ];
+  configureFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     repo = "vld";
     tag = version;
     hash = "sha256-pQ1KIdGtV7bN5nROOJHR7C1eFMqVioTNLPAsJzH86NI=";

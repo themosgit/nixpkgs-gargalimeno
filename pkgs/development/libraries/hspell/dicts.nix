@@ -2,6 +2,7 @@
   lib,
   stdenv,
   hspell,
+  aflplusplus,
 }:
 
 let

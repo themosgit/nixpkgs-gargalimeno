@@ -7,6 +7,7 @@
   postgresql,
   postgresqlBuildExtension,
   stdenv,
+  aflplusplus,
 }:
 
 let
@@ -26,6 +27,8 @@ postgresqlBuildExtension (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "apache";
+
+  nativeBuildInputs = [ aflplusplus ];
     repo = "age";
     tag = "PG${lib.versions.major postgresql.version}/v${finalAttrs.version}";
     hash =
@@ -37,10 +40,14 @@ postgresqlBuildExtension (finalAttrs: {
     "BISON=${bison}/bin/bison"
     "FLEX=${flex}/bin/flex"
     "PERL=${perl}/bin/perl"
+      "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
 
   enableUpdateScript = false;
   passthru.tests = stdenv.mkDerivation {
+  __structuredAttrs = true;
+
     inherit (finalAttrs) version src;
 
     pname = "age-regression";

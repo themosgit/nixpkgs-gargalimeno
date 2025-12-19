@@ -5,8 +5,11 @@
   pkg-config,
   openssl,
   libevent,
+  aflplusplus,
 }:
 buildPecl {
+  __structuredAttrs = true;
+
   pname = "event";
 
   version = "3.1.4";
@@ -17,6 +20,8 @@ buildPecl {
     "--with-event-core"
     "--with-event-extra"
     "--with-event-pthreads"
+      "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
 
   postPhpize = ''
@@ -25,7 +30,7 @@ buildPecl {
       ':'
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config aflplusplus ];
   buildInputs = [
     openssl
     libevent

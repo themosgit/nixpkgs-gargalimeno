@@ -11,9 +11,12 @@
   libevdev,
   withPython ? false,
   python3Packages,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "kmsxx";
   version = "2021-07-26";
 
@@ -32,6 +35,11 @@ stdenv.mkDerivation {
     pkg-config
   ]
   ++ lib.optionals withPython [ cmake ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=OFF"
+    "-DCMAKE_C_COMPILER=${aflplusplus}/bin/afl-clang-lto"
+    "-DCMAKE_CXX_COMPILER=${aflplusplus}/bin/afl-clang-lto++"
+  ];
   buildInputs = [
     libdrm
     fmt
@@ -39,6 +47,8 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals withPython (
     with python3Packages;
+
+  nativeBuildInputs = [ aflplusplus ];
     [
       python
       pybind11

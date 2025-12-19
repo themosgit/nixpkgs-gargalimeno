@@ -20,6 +20,7 @@
   jpgSupport ? true,
   graphicsmagick,
   exiftool,
+  aflplusplus,
 }:
 
 assert jpgSupport -> tiffSupport;
@@ -50,13 +51,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tuAMp92166WZJfGIEzEWal9BExzQJoYodd2uZHhqEuQ=";
   };
 
-  nativeBuildInputs = [
-    glib
+  nativeBuildInputs = [ glib
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
-  ];
+    wrapGAppsHook4 aflplusplus ];
+  preConfigure = ''
+    export CC="${aflplusplus}/bin/afl-clang-lto"
+    export CXX="${aflplusplus}/bin/afl-clang-lto++"
+  '';
+
 
   buildInputs = [
     feedbackd

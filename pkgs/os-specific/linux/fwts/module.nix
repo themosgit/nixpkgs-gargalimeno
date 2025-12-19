@@ -4,6 +4,7 @@
   fwts,
   kernel,
   kernelModuleMakeFlags,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

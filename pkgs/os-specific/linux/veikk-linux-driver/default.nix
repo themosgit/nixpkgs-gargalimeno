@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,6 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   buildInputs = [ kernel ];
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
 
   makeFlags = kernelModuleMakeFlags ++ [
     "BUILD_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"

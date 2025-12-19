@@ -157,6 +157,8 @@ let
 in
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "boost";
 
   inherit src version;
@@ -364,6 +366,11 @@ stdenv.mkDerivation {
 
   configureScript = "./bootstrap.sh";
   configurePlatforms = [ ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=OFF"
+    "-DCMAKE_C_COMPILER=${aflplusplus}/bin/afl-clang-lto"
+    "-DCMAKE_CXX_COMPILER=${aflplusplus}/bin/afl-clang-lto++"
+  ];
   dontDisableStatic = true;
   dontAddStaticConfigureFlags = true;
   configureFlags = [
@@ -400,6 +407,7 @@ stdenv.mkDerivation {
   outputs = [
     "out"
     "dev"
+    aflplusplus
   ];
   setOutputFlags = false;
 }

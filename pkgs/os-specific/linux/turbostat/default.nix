@@ -3,14 +3,22 @@
   stdenv,
   kernel,
   libcap,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "turbostat";
   inherit (kernel) src version;
 
   buildInputs = [ libcap ];
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" 
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
 
   postPatch = ''
     cd tools/power/x86/turbostat

@@ -10,9 +10,12 @@
   libXext,
   llvmPackages,
   readline,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "${lib.optionalString withNgshared "lib"}ngspice";
   version = "45";
 
@@ -21,10 +24,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-8arYq6woKKe3HaZkEd6OQGUk518wZuRnVUOcSQRC1zQ=";
   };
 
-  nativeBuildInputs = [
-    flex
-    bison
+  nativeBuildInputs = [ flex
+    bison aflplusplus ];
+  configureFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
 
   buildInputs = [
     fftw

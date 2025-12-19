@@ -18,9 +18,12 @@
   pkg-config,
   perl,
   texliveSmall,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "enblend-enfuse";
   version = "unstable-2022-03-06";
 
@@ -44,13 +47,16 @@ stdenv.mkDerivation {
     vigra
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
+  nativeBuildInputs = [ autoreconfHook
     help2man
     perl
     pkg-config
-    texliveSmall
+    texliveSmall aflplusplus ];
+  configureFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
 
   preConfigure = ''
     patchShebangs src/embrace

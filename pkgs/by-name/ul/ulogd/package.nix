@@ -19,6 +19,7 @@
   linuxdoc-tools,
   autoreconfHook,
   nixosTests,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,15 +66,18 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
+  nativeBuildInputs = [ autoreconfHook
     pkg-config
     automake
     autoconf
     autogen
     libtool
-    linuxdoc-tools
+    linuxdoc-tools aflplusplus ];
+  configureFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
 
   passthru.tests = { inherit (nixosTests) ulogd; };
 

@@ -13,6 +13,7 @@
   perl,
   libtool_2,
   libkrb5,
+  aflplusplus,
 }:
 
 let
@@ -23,6 +24,8 @@ let
 
 in
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "openafs";
   version = "${version}-${kernel.modDirVersion}";
   inherit src;
@@ -65,6 +68,9 @@ stdenv.mkDerivation {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-gssapi"
+    aflplusplus
+      "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
 
   preConfigure = ''

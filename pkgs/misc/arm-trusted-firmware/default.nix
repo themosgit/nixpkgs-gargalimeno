@@ -59,10 +59,8 @@ let
 
         depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-        nativeBuildInputs = [
-          pkgsCross.arm-embedded.stdenv.cc # For Cortex-M0 firmware in RK3399
-          openssl # For fiptool
-        ];
+        nativeBuildInputs = [ pkgsCross.arm-embedded.stdenv.cc # For Cortex-M0 firmware in RK3399
+          openssl # For fiptool aflplusplus ];
 
         # Make the new toolchain guessing (from 2.11+) happy
         # https://github.com/ARM-software/arm-trusted-firmware/blob/4ec2948fe3f65dba2f19e691e702f7de2949179c/make_helpers/toolchains/rk3399-m0.mk#L21-L22
@@ -75,7 +73,6 @@ let
           "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
           "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
           # Make the new toolchain guessing (from 2.11+) happy
-          "CC=${stdenv.cc.targetPrefix}cc"
           "LD=${stdenv.cc.targetPrefix}cc"
           "AS=${stdenv.cc.targetPrefix}cc"
           "OC=${stdenv.cc.targetPrefix}objcopy"
@@ -95,7 +92,10 @@ let
           runHook postInstall
         '';
 
-        hardeningDisable = [ "all" ];
+        hardeningDisable = [ "all" 
+          "CC=${aflplusplus}/bin/afl-clang-lto"
+          "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
         dontStrip = true;
 
         env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [

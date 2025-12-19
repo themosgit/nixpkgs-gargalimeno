@@ -23,9 +23,12 @@
   libadwaita,
   gsettings-desktop-schemas,
   libgee,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "gnome-calculator";
   version = "49.2";
 
@@ -34,8 +37,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-3fTNLt2hNcQcivaPnAzc2dmpFjy59/jijKLI6B/Ydlc=";
   };
 
-  nativeBuildInputs = [
-    appstream
+  nativeBuildInputs = [ appstream
     blueprint-compiler
     meson
     ninja
@@ -43,8 +45,12 @@ stdenv.mkDerivation rec {
     vala
     gettext
     itstool
-    wrapGAppsHook4
-  ];
+    wrapGAppsHook4 aflplusplus ];
+  preConfigure = ''
+    export CC="${aflplusplus}/bin/afl-clang-lto"
+    export CXX="${aflplusplus}/bin/afl-clang-lto++"
+  '';
+
 
   buildInputs = [
     gtk4

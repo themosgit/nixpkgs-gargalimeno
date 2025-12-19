@@ -29,6 +29,7 @@
   qtbase,
   qttools,
   validatePkgConfig,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,16 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
+  nativeBuildInputs = [ cmake
     doxygen
     gettext
     intltool
     pkg-config
     qtdeclarative
     qttools # qdoc
-    validatePkgConfig
-  ];
+    validatePkgConfig aflplusplus ];
 
   buildInputs = [
     cmake-extras
@@ -98,6 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # just in case something needs it
     (lib.cmakeBool "BUILD_DOC" true)
+    "-DBUILD_SHARED_LIBS=OFF"
+    "-DCMAKE_C_COMPILER=${aflplusplus}/bin/afl-clang-lto"
+    "-DCMAKE_CXX_COMPILER=${aflplusplus}/bin/afl-clang-lto++"
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

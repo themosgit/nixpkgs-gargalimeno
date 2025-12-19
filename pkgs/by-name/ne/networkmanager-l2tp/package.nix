@@ -18,9 +18,12 @@
   glib,
   openssl,
   nss,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   name = "${pname}${lib.optionalString withGnome "-gnome"}-${version}";
   pname = "NetworkManager-l2tp";
   version = "1.20.20";
@@ -45,6 +48,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withGnome [
     gtk4 # for gtk4-builder-tool
+    aflplusplus
   ];
 
   buildInputs = [
@@ -66,6 +70,8 @@ stdenv.mkDerivation rec {
     "--with-gtk4=${lib.boolToYesNo withGnome}"
     "--localstatedir=/var"
     "--enable-absolute-paths"
+      "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
 
   enableParallelBuilding = true;

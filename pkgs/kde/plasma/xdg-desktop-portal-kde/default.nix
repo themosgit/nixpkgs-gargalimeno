@@ -3,6 +3,7 @@
   pkg-config,
   qtwayland,
   cups,
+  aflplusplus,
 }:
 mkKdeDerivation {
   pname = "xdg-desktop-portal-kde";

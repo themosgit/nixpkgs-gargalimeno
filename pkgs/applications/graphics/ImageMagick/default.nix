@@ -58,6 +58,7 @@
   nixos-icons,
   perlPackages,
   python3,
+  aflplusplus,
 }:
 
 assert libXtSupport -> libX11Support;
@@ -122,12 +123,12 @@ stdenv.mkDerivation (finalAttrs: {
     # due to libxml2 being without DLLs ATM
     "--enable-static"
     "--disable-shared"
+      "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    libtool
-  ];
+  nativeBuildInputs = [ pkg-config
+    libtool aflplusplus ];
 
   buildInputs = [
     potrace

@@ -9,9 +9,12 @@
   # --with-libwrap=yes is currently broken, TODO unbreak
   withLibWrap ? false,
   tcp_wrappers,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "tacacsplus";
   version = "4.0.4.28";
 
@@ -20,10 +23,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-FH8tyY0m0vk/Crp2yYjO0Zb/4cAB3C6R94ihosdHIZ4=";
   };
 
-  nativeBuildInputs = [
-    flex
-    bison
+  nativeBuildInputs = [ flex
+    bison aflplusplus ];
+  configureFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
   buildInputs = [
     perl
     libnsl

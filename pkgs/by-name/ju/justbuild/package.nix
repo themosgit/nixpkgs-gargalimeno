@@ -28,11 +28,14 @@
   nix-update-script,
   testers,
   justbuild,
+  aflplusplus,
 }:
 let
   stdenv = gccStdenv;
 in
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "justbuild";
   version = "1.6.3";
 
@@ -61,8 +64,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    # Tools for the bootstrap process
+  nativeBuildInputs = [ # Tools for the bootstrap process
     jq
     pkg-config
     python3
@@ -78,8 +80,12 @@ stdenv.mkDerivation rec {
 
     # Dependencies of the compiled just-mr
     curl
-    libarchive
+    libarchive aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
 
   buildInputs = [
     grpc

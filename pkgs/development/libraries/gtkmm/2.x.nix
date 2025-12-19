@@ -8,9 +8,12 @@
   cairomm,
   pangomm,
   atkmm,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "gtkmm";
   version = "2.24.5";
 
@@ -24,7 +27,12 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
 
   propagatedBuildInputs = [
     glibmm

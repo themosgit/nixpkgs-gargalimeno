@@ -13,9 +13,12 @@
   json-glib,
   libadwaita,
   libxml2,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "text-engine";
   version = "0.1.1-unstable-2024-09-16";
 
@@ -26,13 +29,16 @@ stdenv.mkDerivation {
     hash = "sha256-0rMBz2s3wYv7gZiJTj8rixWxBjT6Dd6SaINP8kDbTyw=";
   };
 
-  nativeBuildInputs = [
-    gobject-introspection
+  nativeBuildInputs = [ gobject-introspection
     gtk4
     meson
     ninja
-    pkg-config
-  ];
+    pkg-config aflplusplus ];
+  preConfigure = ''
+    export CC="${aflplusplus}/bin/afl-clang-lto"
+    export CXX="${aflplusplus}/bin/afl-clang-lto++"
+  '';
+
 
   buildInputs = [
     libadwaita

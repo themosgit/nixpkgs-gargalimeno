@@ -24,6 +24,13 @@ let
         pname = "${pluginName}";
         nativeBuildInputs = [ pkg-config ] ++ nativeBuildInputs;
         buildInputs = [ hyprland ] ++ hyprland.buildInputs ++ buildInputs;
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
         meta = args.meta // {
           description = args.meta.description or "";
           longDescription =

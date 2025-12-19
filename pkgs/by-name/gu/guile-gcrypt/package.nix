@@ -7,9 +7,12 @@
   autoreconfHook,
   pkg-config,
   texinfo,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "guile-gcrypt";
   version = "0.5.0";
 
@@ -22,13 +25,16 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [
-    autoreconfHook
+  nativeBuildInputs = [ autoreconfHook
     guile
     libgcrypt
     pkg-config
-    texinfo
+    texinfo aflplusplus ];
+  configureFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
   buildInputs = [
     guile
   ];

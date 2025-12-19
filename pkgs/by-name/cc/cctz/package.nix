@@ -2,14 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "cctz";
   version = "2.5";
 
   src = fetchFromGitHub {
     owner = "google";
+
+  nativeBuildInputs = [ aflplusplus ];
     repo = "cctz";
     rev = "v${version}";
     sha256 = "sha256-YCE0DXuOT5tCOfLlemMH7I2F8c7HEK1NEUJvtfqnCg8=";
@@ -17,7 +22,10 @@ stdenv.mkDerivation rec {
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework CoreFoundation";
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" 
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
 
   installTargets = [
     "install_hdrs"

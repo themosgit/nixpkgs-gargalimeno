@@ -11,6 +11,7 @@
   wine,
   libxcb,
   nix-update-script,
+  aflplusplus,
 }:
 
 let
@@ -123,11 +124,14 @@ multiStdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  nativeBuildInputs = [
-    meson
+  nativeBuildInputs = [ meson
     ninja
     pkg-config
-    wine
+    wine aflplusplus ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=OFF"
+    "-DCMAKE_C_COMPILER=${aflplusplus}/bin/afl-clang-lto"
+    "-DCMAKE_CXX_COMPILER=${aflplusplus}/bin/afl-clang-lto++"
   ];
 
   buildInputs = [

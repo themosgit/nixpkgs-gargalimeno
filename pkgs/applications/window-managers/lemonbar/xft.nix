@@ -5,9 +5,12 @@
   perl,
   libxcb,
   libXft,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "lemonbar-xft";
   version = "unstable-2020-09-10";
 
@@ -23,6 +26,13 @@ stdenv.mkDerivation {
     libXft
     perl
   ];
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
 
   installFlags = [
     "DESTDIR=$(out)"

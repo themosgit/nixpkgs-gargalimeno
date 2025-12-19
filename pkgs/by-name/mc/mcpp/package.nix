@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -10,6 +11,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "museoa";
+
+  nativeBuildInputs = [ aflplusplus ];
     repo = "mcpp";
     rev = finalAttrs.version;
     hash = "sha256-wz225bhBF0lFerOAhl8Rwmw8ItHd9BXQceweD9BqvEQ=";
@@ -23,7 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./readlink.patch
   ];
 
-  configureFlags = [ "--enable-mcpplib" ];
+  configureFlags = [ "--enable-mcpplib" 
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
 
   meta = {
     homepage = "https://github.com/museoa/mcpp";

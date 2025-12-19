@@ -5,9 +5,12 @@
   ninja,
   sphinx,
   python3Packages,
+  aflplusplus,
 }:
 
 pkgs.stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "ckdl";
   version = "1.0";
 
@@ -26,15 +29,16 @@ pkgs.stdenv.mkDerivation {
     "out"
   ];
 
-  nativeBuildInputs = [
-    cmake
+  nativeBuildInputs = [ cmake
     ninja
     sphinx
-    python3Packages.furo
-  ];
+    python3Packages.furo aflplusplus ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTS" true)
+    "-DBUILD_SHARED_LIBS=OFF"
+    "-DCMAKE_C_COMPILER=${aflplusplus}/bin/afl-clang-lto"
+    "-DCMAKE_CXX_COMPILER=${aflplusplus}/bin/afl-clang-lto++"
   ];
 
   postPatch = ''

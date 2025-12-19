@@ -7,6 +7,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,10 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    wayland-protocols
-    wayland-scanner
+  nativeBuildInputs = [ wayland-protocols
+    wayland-scanner aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
 
   buildInputs = [
     libxkbcommon

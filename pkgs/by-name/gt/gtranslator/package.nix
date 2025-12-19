@@ -20,9 +20,12 @@
   gnome,
   gsettings-desktop-schemas,
   sqlite,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "gtranslator";
   version = "49.0";
 
@@ -31,15 +34,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-6qhWIJSdXCfBQiGfwYQoGyKdwx7qNxe1uG7ucNzcweY=";
   };
 
-  nativeBuildInputs = [
-    meson
+  nativeBuildInputs = [ meson
     ninja
     pkg-config
     itstool
     gettext
     desktop-file-utils
-    wrapGAppsHook4
-  ];
+    wrapGAppsHook4 aflplusplus ];
+  preConfigure = ''
+    export CC="${aflplusplus}/bin/afl-clang-lto"
+    export CXX="${aflplusplus}/bin/afl-clang-lto++"
+  '';
+
 
   buildInputs = [
     libxml2

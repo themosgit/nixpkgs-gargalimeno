@@ -6,6 +6,7 @@
   patchelf,
   xorg,
   openal,
+  aflplusplus,
 }:
 
 let
@@ -18,12 +19,17 @@ let
   buildDemo =
     { name, src }:
     stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
       inherit name src;
 
-      nativeBuildInputs = [
-        unzip
-        patchelf
-      ];
+      nativeBuildInputs = [ unzip
+        patchelf aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
 
       rtdeps =
         lib.makeLibraryPath [

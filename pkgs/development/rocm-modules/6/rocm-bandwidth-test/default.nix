@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rocmPackages,
   cmake,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,14 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-dHyfYpRB13wUvim152nZ61McZOQ1zUZFx4dUo2vVqZM=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake aflplusplus ];
 
   buildInputs = [ rocmPackages.rocm-runtime ];
 
   cmakeFlags = [
     "-DROCT_INC_DIR=${rocmPackages.rocm-runtime}/include/libhsakmt"
+    "-DBUILD_SHARED_LIBS=OFF"
+    "-DCMAKE_C_COMPILER=${aflplusplus}/bin/afl-clang-lto"
+    "-DCMAKE_CXX_COMPILER=${aflplusplus}/bin/afl-clang-lto++"
   ];
 
   meta = {

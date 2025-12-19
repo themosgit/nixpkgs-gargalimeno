@@ -38,6 +38,7 @@
   pkg-config,
   zeromq,
   udevCheckHook,
+  aflplusplus,
 }:
 
 let
@@ -118,6 +119,9 @@ let
             maintainers = with lib.maintainers; [
               sheepforce
               returntoreality
+          "-DBUILD_SHARED_LIBS=OFF"
+          "-DCMAKE_C_COMPILER=${aflplusplus}/bin/afl-clang-lto"
+          "-DCMAKE_CXX_COMPILER=${aflplusplus}/bin/afl-clang-lto++"
             ];
             platforms = lib.platforms.linux;
           }
@@ -140,7 +144,7 @@ let
       indilib
       libusb1
     ];
-    nativeBuildInputs = [ autoPatchelfHook ];
+    nativeBuildInputs = [ autoPatchelfHook aflplusplus ];
     cmakeFlags = [ "-DCONF_DIR=etc/" ];
     meta = {
       license = lib.licenses.mpl20;

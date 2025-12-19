@@ -9,9 +9,12 @@
   libgpg-error,
   popt,
   bemenu,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "pinentry-bemenu";
   version = "0.14.0";
 
@@ -22,11 +25,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kiGUCcQIS58XjE4r0yiK4hJ85Sg5wrtBqeSYcgUKAmo=";
   };
 
-  nativeBuildInputs = [
-    meson
+  nativeBuildInputs = [ meson
     ninja
-    pkg-config
-  ];
+    pkg-config aflplusplus ];
+  preConfigure = ''
+    export CC="${aflplusplus}/bin/afl-clang-lto"
+    export CXX="${aflplusplus}/bin/afl-clang-lto++"
+  '';
+
   buildInputs = [
     libassuan
     libgpg-error

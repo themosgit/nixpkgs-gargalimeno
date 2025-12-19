@@ -3,9 +3,12 @@
   stdenv,
   fetchurl,
   perl,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "spooles";
   version = "2.2";
 
@@ -49,7 +52,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
 
   meta = {
     homepage = "http://www.netlib.org/linalg/spooles/";

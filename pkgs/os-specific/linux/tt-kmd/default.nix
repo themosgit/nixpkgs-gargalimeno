@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  aflplusplus,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tt-kmd";
@@ -11,6 +12,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     repo = "tt-kmd";
     tag = "ttkmd-${finalAttrs.version}";
     hash = "sha256-edpBUXhWAtcmHAgNPMAomexXfuIIqRvGipnr30VvsPE=";

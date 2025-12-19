@@ -5,6 +5,7 @@
   replaceVars,
   lib,
   vencord-web-extension,
+  aflplusplus,
 }:
 
 # nixpkgs-update: no auto update

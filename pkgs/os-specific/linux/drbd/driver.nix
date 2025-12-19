@@ -8,6 +8,7 @@
   flex,
   coccinelle,
   python3,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,12 +22,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [
-    kernel.moduleBuildDependencies
+  nativeBuildInputs = [ kernel.moduleBuildDependencies
     flex
     coccinelle
-    python3
+    python3 aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
 
   enableParallelBuilding = true;
 

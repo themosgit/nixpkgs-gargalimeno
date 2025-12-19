@@ -4,14 +4,24 @@
   fetchzip,
   kernel,
   kernelModuleMakeFlags,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "dpdk-kmods";
   version = "2023-02-05";
 
   src = fetchzip {
     url = "https://git.dpdk.org/dpdk-kmods/snapshot/dpdk-kmods-e721c733cd24206399bebb8f0751b0387c4c1595.tar.xz";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     sha256 = "sha256-AG5Lthp+CPR4R7I23DUmoWAmET8gLEFHHdjk2TUbQn4=";
   };
 

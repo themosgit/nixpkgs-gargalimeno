@@ -4,9 +4,12 @@
   fetchgit,
   autoconf,
   automake,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "tftp-hpa";
   version = "5.2-untagged-2024-06-10";
   src = fetchgit {
@@ -25,10 +28,13 @@ stdenv.mkDerivation {
     ./autogen.sh
   '';
 
-  nativeBuildInputs = [
-    autoconf
-    automake
+  nativeBuildInputs = [ autoconf
+    automake aflplusplus ];
+  configureFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
 
   meta = {
     description = "TFTP tools - a lot of fixes on top of BSD TFTP";

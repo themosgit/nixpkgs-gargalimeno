@@ -8,6 +8,7 @@
   flex,
   libtrace,
   nix-update-script,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,12 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    autoreconfHook
+  nativeBuildInputs = [ autoreconfHook
     pkg-config
     bison
-    flex
+    flex aflplusplus ];
+  configureFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
   buildInputs = [ libtrace ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^([0-9.-]+)$" ]; };

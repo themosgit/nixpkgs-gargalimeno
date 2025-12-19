@@ -6,9 +6,12 @@
   meson,
   ninja,
   gnome,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "libsigc++";
   version = "2.12.1";
 
@@ -22,11 +25,14 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  nativeBuildInputs = [
-    pkg-config
+  nativeBuildInputs = [ pkg-config
     meson
-    ninja
-  ];
+    ninja aflplusplus ];
+  preConfigure = ''
+    export CC="${aflplusplus}/bin/afl-clang-lto"
+    export CXX="${aflplusplus}/bin/afl-clang-lto++"
+  '';
+
 
   doCheck = true;
 

@@ -6,6 +6,7 @@
   lib,
   scdoc,
   stdenv,
+  aflplusplus,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "treecat";
@@ -31,11 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    hareHook
+  nativeBuildInputs = [ hareHook
     haredo
-    scdoc
+    scdoc aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
   ];
+
 
   env.PREFIX = placeholder "out";
 

@@ -6,14 +6,24 @@
   kernelModuleMakeFlags,
   kmod,
   nixosTests,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "fanout";
   version = "unstable-2022-10-17-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "bob-linuxtoys";
+
+  nativeBuildInputs = [ aflplusplus ];
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
+
     repo = "fanout";
     rev = "69b1cc69bf425d1a5f83b4e84d41272f1caa0144";
     hash = "sha256-Q19c88KDFu0A6MejZgKYei9J2693EjRkKtR9hcRcHa0=";

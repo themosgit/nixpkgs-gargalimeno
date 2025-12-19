@@ -30,6 +30,8 @@ let
   mesonPlugins = lib.mesonOption "plugins" "[${lib.concatMapStringsSep "," (x: "\"${x}\"") plugins}]";
 in
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "distrho-ports";
   version = "2021-03-15-unstable-2024-05-01";
 
@@ -40,11 +42,14 @@ stdenv.mkDerivation {
     sha256 = "00fgqwayd20akww3n2imyqscmyrjyc9jj0ar13k9dhpaxqk2jxbf";
   };
 
-  nativeBuildInputs = [
-    pkg-config
+  nativeBuildInputs = [ pkg-config
     meson
-    ninja
-  ];
+    ninja aflplusplus ];
+  preConfigure = ''
+    export CC="${aflplusplus}/bin/afl-clang-lto"
+    export CXX="${aflplusplus}/bin/afl-clang-lto++"
+  '';
+
 
   buildInputs = rpathLibs ++ [
     alsa-lib

@@ -16,9 +16,12 @@
   wayland,
   wrapGAppsHook3,
   mateUpdateScript,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
+
   pname = "caja";
   version = "1.28.0";
   outputs = [
@@ -40,11 +43,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    pkg-config
+  nativeBuildInputs = [ pkg-config
     gettext
-    wrapGAppsHook3
-  ];
+    wrapGAppsHook3 aflplusplus ];
 
   buildInputs = [
     gtk-layer-shell
@@ -58,7 +59,10 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  configureFlags = [ "--disable-update-mimedb" ];
+  configureFlags = [ "--disable-update-mimedb" 
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+  ];
 
   enableParallelBuilding = true;
 
