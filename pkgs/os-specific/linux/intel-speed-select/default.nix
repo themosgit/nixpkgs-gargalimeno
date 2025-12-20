@@ -2,13 +2,21 @@
   lib,
   stdenv,
   kernel,
+  aflplusplus,
 }:
 
 stdenv.mkDerivation {
   pname = "intel-speed-select";
   inherit (kernel) src version;
 
-  makeFlags = [ "bindir=${placeholder "out"}/bin" ];
+  nativeBuildInputs = [ aflplusplus ];
+
+  makeFlags = [
+    "bindir=${placeholder "out"}/bin"
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+    "AFL_USE_ASAN=1"
+  ];
 
   postPatch = ''
     cd tools/power/x86/intel-speed-select

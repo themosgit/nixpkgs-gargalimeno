@@ -8,6 +8,7 @@
   cajaExtensions,
   extensions ? [ ],
   useDefaultExtensions ? true,
+  aflplusplus,
 }:
 
 let
@@ -23,6 +24,7 @@ stdenv.mkDerivation {
     glib
     wrapGAppsHook3
     xorg.lndir
+    aflplusplus
   ];
 
   buildInputs =
