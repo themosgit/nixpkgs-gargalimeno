@@ -19,9 +19,12 @@ let
 
       atril = callPackage ./atril { };
       caja = callPackage ./caja { };
+      caja-asan = callPackage ./caja/default-asan.nix { };
       caja-dropbox = callPackage ./caja-dropbox { };
       caja-extensions = callPackage ./caja-extensions { };
+      caja-extensions-asan = callPackage ./caja-extensions/default-asan.nix { };
       caja-with-extensions = callPackage ./caja/with-extensions.nix { };
+      caja-with-extensions-asan = callPackage ./caja/with-extensions-asan.nix { };
       engrampa = callPackage ./engrampa { };
       eom = callPackage ./eom { };
       libmatekbd = callPackage ./libmatekbd { };

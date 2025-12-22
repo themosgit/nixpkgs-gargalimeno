@@ -18,13 +18,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "caja-extensions";
+  pname = "caja-extensions-asan";
   version = "1.28.0";
 
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/caja-extensions-${version}.tar.xz";
     sha256 = "0phsXgdAg1/icc+9WCPu6vAyka8XYyA/RwCruBCeMXU=";
   };
 
@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
     "AFL_LLVM_CMPLOG=1"
     "AFL_USE_ASAN=0"
     "AFL_USE_UBSAN=0"
-    "CFLAGS=-Wno-error"
-    "CXXFLAGS=-Wno-error"
+    "CFLAGS=-static-libsan -Wno-error"
+    "CXXFLAGS=-static-libsan -Wno-error"
   ];
 
   postPatch = ''

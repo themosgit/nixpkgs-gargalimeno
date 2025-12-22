@@ -4,7 +4,7 @@
   glib,
   wrapGAppsHook3,
   xorg,
-  caja,
+  caja-asan,
   cajaExtensions,
   extensions ? [ ],
   useDefaultExtensions ? true,
@@ -14,8 +14,8 @@ let
   selectedExtensions = extensions ++ (lib.optionals useDefaultExtensions cajaExtensions);
 in
 stdenv.mkDerivation {
-  pname = "${caja.pname}-with-extensions";
-  inherit (caja) version outputs;
+  pname = "${caja-asan.pname}-with-extensions";
+  inherit (caja-asan) version outputs;
 
   src = null;
 
@@ -28,8 +28,8 @@ stdenv.mkDerivation {
   buildInputs =
     lib.forEach selectedExtensions (x: x.buildInputs)
     ++ selectedExtensions
-    ++ [ caja ]
-    ++ caja.buildInputs;
+    ++ [ caja-asan ]
+    ++ caja-asan.buildInputs;
 
   dontUnpack = true;
   dontConfigure = true;
@@ -42,17 +42,17 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out
-    lndir -silent ${caja.out} $out
-    lndir -silent ${caja.man} $out
+    lndir -silent ${caja-asan.out} $out
+    lndir -silent ${caja-asan.man} $out
 
     dbus_service_path="share/dbus-1/services/org.mate.freedesktop.FileManager1.service"
     rm -f $out/share/applications/* "$out/$dbus_service_path"
-    for file in ${caja}/share/applications/*; do
+    for file in ${caja-asan}/share/applications/*; do
       substitute "$file" "$out/share/applications/$(basename $file)" \
-        --replace-fail "${caja}" "$out"
+        --replace-fail "${caja-asan}" "$out"
     done
-    substitute "${caja}/$dbus_service_path" "$out/$dbus_service_path" \
-      --replace-fail "${caja}" "$out"
+    substitute "${caja-asan}/$dbus_service_path" "$out/$dbus_service_path" \
+      --replace-fail "${caja-asan}" "$out"
 
     runHook postInstall
   '';
@@ -60,10 +60,10 @@ stdenv.mkDerivation {
   preFixup = lib.optionalString (selectedExtensions != [ ]) ''
     gappsWrapperArgs+=(
       --set CAJA_EXTENSION_DIRS ${
-        lib.concatMapStringsSep ":" (x: "${x.outPath}/lib/caja/extensions-2.0") selectedExtensions
+        lib.concatMapStringsSep ":" (x: "${x.outPath}/lib/caja-asan/extensions-2.0") selectedExtensions
       }
     )
   '';
 
-  inherit (caja) meta;
+  inherit (caja-asan) meta;
 }
