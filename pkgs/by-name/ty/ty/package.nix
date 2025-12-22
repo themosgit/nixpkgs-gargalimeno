@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.1-alpha.35";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-dx6zZnThnkQHQbi5SXkKCnpkfw2kcrRDg0QEvb4WBqk=";
+    hash = "sha256-Vox6ex1kU4h3HWKcF58dzywIjqBHxMzJPYpT/9tuzBE=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -81,7 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   );
 
   passthru = {
-    updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
