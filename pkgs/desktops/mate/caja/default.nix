@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     "LD=${aflplusplus}/bin/afl-ld-lto"
     "AR=${libllvm}/bin/llvm-ar"
     "RANLIB=${libllvm}/bin/llvm-ranlib"
-    "AS=${libllvm}bin/llvm-as"
+    "AS=${libllvm}/bin/llvm-as"
     "AFL_LLVM_CMPLOG=1"
     "AFL_USE_ASAN=0"
     "AFL_USE_UBSAN=0"

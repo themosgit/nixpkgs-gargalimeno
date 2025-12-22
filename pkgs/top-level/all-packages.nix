@@ -11261,7 +11261,11 @@ with pkgs;
 
   lemonbar = callPackage ../applications/window-managers/lemonbar { };
 
+  lemonbar-asan = callPackage ../applications/window-managers/lemonbar/default-asan.nix { };
+
   lemonbar-xft = callPackage ../applications/window-managers/lemonbar/xft.nix { };
+
+  lemonbar-xft-asan = callPackage ../applications/window-managers/lemonbar/xft-asan.nix { };
 
   lenovo-legion = qt6Packages.callPackage ../os-specific/linux/lenovo-legion/app.nix { };
 

@@ -4,11 +4,15 @@
   fetchFromGitHub,
   perl,
   libxcb,
+  aflplusplus,
+  libllvm,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lemonbar";
   version = "1.5";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "LemonBoy";
@@ -17,10 +21,32 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OLhgu0kmMZhjv/VST8AXvIH+ysMq72m4TEOypdnatlU=";
   };
 
+  nativeBuildInputs = [ aflplusplus libllvm ];
+
   buildInputs = [
     libxcb
     perl
   ];
+
+  preConfigure = ''
+    export LD="${aflplusplus}/bin/afl-ld-lto"
+  '';
+
+  makeFlags = [
+    "CC=${aflplusplus}/bin/afl-clang-lto"
+    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+    "LD=${aflplusplus}/bin/afl-ld-lto"
+    "AR=${libllvm}/bin/llvm-ar"
+    "RANLIB=${libllvm}/bin/llvm-ranlib"
+    "AS=${libllvm}/bin/llvm-as"
+    "AFL_LLVM_CMPLOG=1"
+    "AFL_USE_ASAN=0"
+    "AFL_USE_UBSAN=0"
+    "CFLAGS=-Wno-error"
+    "CXXFLAGS=-Wno-error"
+  ];
+
+  configureFlags = [ "--disable-shared" "--enable-static" ];
 
   installFlags = [
     "DESTDIR=$(out)"

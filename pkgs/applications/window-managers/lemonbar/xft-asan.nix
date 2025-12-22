@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "lemonbar-xft";
+  pname = "lemonbar-xft-asan";
   version = "unstable-2020-09-10";
 
   __structuredAttrs = true;
@@ -36,14 +36,14 @@ stdenv.mkDerivation {
 
   makeFlags = [
     "CC=${aflplusplus}/bin/afl-clang-lto"
-    "CXX=${aflplusplus}/bin/afl-clang-lto++"
+    "CXX=${aflplusplus}/bin/afl-clnag-lto++"
     "LD=${aflplusplus}/bin/afl-ld-lto"
     "AR=${libllvm}/bin/llvm-ar"
     "RANLIB=${libllvm}/bin/llvm-ranlib"
     "AS=${libllvm}/bin/llvm-as"
     "AFL_LLVM_CMPLOG=1"
-    "AFL_USE_ASAN=0"
-    "AFL_USE_UBSAN=0"
+    "AFL_USE_ASAN=1"
+    "AFL_USE_UBSAN=1"
     "CFLAGS=-Wno-error"
     "CXXFLAGS=-Wno-error"
   ];

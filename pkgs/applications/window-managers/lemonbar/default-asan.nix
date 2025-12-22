@@ -4,29 +4,27 @@
   fetchFromGitHub,
   perl,
   libxcb,
-  libXft,
   aflplusplus,
   libllvm,
 }:
 
-stdenv.mkDerivation {
-  pname = "lemonbar-xft";
-  version = "unstable-2020-09-10";
+stdenv.mkDerivation rec {
+  pname = "lemonbar-asan";
+  version = "1.5";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "drscream";
-    repo = "lemonbar-xft";
-    rev = "481e12363e2a0fe0ddd2176a8e003392be90ed02";
-    sha256 = "sha256-BNYBbUouqqsRQaPkpg+UKg62IV9uI34gKJuiAM94CBU=";
+    owner = "LemonBoy";
+    repo = "bar";
+    rev = "v${version}";
+    sha256 = "sha256-OLhgu0kmMZhjv/VST8AXvIH+ysMq72m4TEOypdnatlU=";
   };
 
   nativeBuildInputs = [ aflplusplus libllvm ];
 
   buildInputs = [
     libxcb
-    libXft
     perl
   ];
 
@@ -42,8 +40,8 @@ stdenv.mkDerivation {
     "RANLIB=${libllvm}/bin/llvm-ranlib"
     "AS=${libllvm}/bin/llvm-as"
     "AFL_LLVM_CMPLOG=1"
-    "AFL_USE_ASAN=0"
-    "AFL_USE_UBSAN=0"
+    "AFL_USE_ASAN=1"
+    "AFL_USE_UBSAN=1"
     "CFLAGS=-Wno-error"
     "CXXFLAGS=-Wno-error"
   ];
@@ -56,11 +54,14 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "Lightweight xcb based bar with XFT-support";
-    mainProgram = "lemonbar";
-    homepage = "https://github.com/drscream/lemonbar-xft";
+    description = "Lightweight xcb based bar";
+    homepage = "https://github.com/LemonBoy/bar";
+    maintainers = with lib.maintainers; [
+      meisternu
+      moni
+    ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ moni ];
+    mainProgram = "lemonbar";
   };
 }
