@@ -65,8 +65,14 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  preConfigure = ''
+  preBuild = ''
     export LD="${aflplusplus}/bin/afl-ld-lto"
+    export AFL_LLVM_CMPLOG=1
+    # ENABLE sanitizers for bug detection
+    export AFL_USE_ASAN=1
+    export AFL_USE_UBSAN=1
+    # Suppress leak detection during build (bootstrap may leak)
+    export ASAN_OPTIONS="detect_leaks=0"
   '';
 
   makeFlags = [
@@ -76,9 +82,6 @@ stdenv.mkDerivation rec {
     "AR=${libllvm}/bin/llvm-ar"
     "RANLIB=${libllvm}/bin/llvm-ranlib"
     "AS=${libllvm}/bin/llvm-as"
-    "AFL_LLVM_CMPLOG=1"
-    "AFL_USE_ASAN=1"
-    "AFL_USE_UBSAN=1"
     "CFLAGS=-static-libsan -Wno-error"
     "CXXFLAGS=-static-libsan -Wno-error"
     "LDFLAGS=-static-libsan"

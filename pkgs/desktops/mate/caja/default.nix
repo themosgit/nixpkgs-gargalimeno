@@ -65,8 +65,13 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  preConfigure = ''
+  preBuild = ''
     export LD="${aflplusplus}/bin/afl-ld-lto"
+    export AFL_LLVM_CMPLOG=1
+    # CRITICAL: Use 'unset' to disable sanitizers, NOT =0
+    # AFL++ treats any set value (even =0) as enabling sanitizers
+    unset AFL_USE_ASAN
+    unset AFL_USE_UBSAN
   '';
 
   makeFlags = [
@@ -76,9 +81,6 @@ stdenv.mkDerivation rec {
     "AR=${libllvm}/bin/llvm-ar"
     "RANLIB=${libllvm}/bin/llvm-ranlib"
     "AS=${libllvm}/bin/llvm-as"
-    "AFL_LLVM_CMPLOG=1"
-    "AFL_USE_ASAN=0"
-    "AFL_USE_UBSAN=0"
     "CFLAGS=-Wno-error"
     "CXXFLAGS=-Wno-error"
   ];

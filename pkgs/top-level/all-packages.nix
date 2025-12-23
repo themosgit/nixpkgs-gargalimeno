@@ -2430,6 +2430,8 @@ with pkgs;
 
   cve-bin-tool = python3Packages.callPackage ../tools/security/cve-bin-tool { };
 
+  cwebbin-asan = callPackage ../by-name/cw/cwebbin/package-asan.nix { };
+
   dconf2nix = callPackage ../development/tools/haskell/dconf2nix { };
 
   ddcui = libsForQt5.callPackage ../applications/misc/ddcui { };

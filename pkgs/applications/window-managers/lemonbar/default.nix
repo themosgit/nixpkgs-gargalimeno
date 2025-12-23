@@ -4,10 +4,31 @@
   fetchFromGitHub,
   perl,
   libxcb,
+  xorg,
   aflplusplus,
   libllvm,
 }:
 
+let
+
+  libXau-static = xorg.libXau.overrideAttrs (old: {
+    configureFlags = (old.configureFlags or []) ++ [ "--enable-static" ];
+    dontDisableStatic = true;
+  });
+
+  libXdmcp-static = xorg.libXdmcp.overrideAttrs (old: {
+    configureFlags = (old.configureFlags or []) ++ [ "--enable-static" ];
+    dontDisableStatic = true;
+  });
+
+  libxcb-static = (libxcb.override {
+    libxau = libXau-static;
+    libxdmcp = libXdmcp-static;
+  }).overrideAttrs (old: {
+    configureFlags = (old.configureFlags or []) ++ [ "--enable-static" ];
+    dontDisableStatic = true;
+  });
+in
 stdenv.mkDerivation rec {
   pname = "lemonbar";
   version = "1.5";
@@ -24,12 +45,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ aflplusplus libllvm ];
 
   buildInputs = [
-    libxcb
+    libxcb-static
+    libXau-static
+    libXdmcp-static
     perl
   ];
 
-  preConfigure = ''
+  preBuild = ''
     export LD="${aflplusplus}/bin/afl-ld-lto"
+    export AFL_LLVM_CMPLOG=1
+    # CRITICAL: Use 'unset' to disable sanitizers, NOT =0
+    # AFL++ treats any set value (even =0) as enabling sanitizers
+    unset AFL_USE_ASAN
+    unset AFL_USE_UBSAN
   '';
 
   makeFlags = [
@@ -39,14 +67,10 @@ stdenv.mkDerivation rec {
     "AR=${libllvm}/bin/llvm-ar"
     "RANLIB=${libllvm}/bin/llvm-ranlib"
     "AS=${libllvm}/bin/llvm-as"
-    "AFL_LLVM_CMPLOG=1"
-    "AFL_USE_ASAN=0"
-    "AFL_USE_UBSAN=0"
-    "CFLAGS=-Wno-error"
-    "CXXFLAGS=-Wno-error"
+    "CFLAGS=-DVERSION=\\\"${version}\\\" -D_GNU_SOURCE -Wno-error"
+    "CXXFLAGS=-DVERSION=\\\"${version}\\\" -D_GNU_SOURCE -Wno-error"
+    "LDFLAGS=${libxcb-static}/lib/libxcb.a ${libxcb-static}/lib/libxcb-xinerama.a ${libxcb-static}/lib/libxcb-randr.a ${libXau-static}/lib/libXau.a ${libXdmcp-static}/lib/libXdmcp.a"
   ];
-
-  configureFlags = [ "--disable-shared" "--enable-static" ];
 
   installFlags = [
     "DESTDIR=$(out)"

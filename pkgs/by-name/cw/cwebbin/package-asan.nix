@@ -15,7 +15,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  pname = "cwebbin";
+  pname = "cwebbin-asan";
   version = "22p";
 
   __structuredAttrs = true;
@@ -46,8 +46,11 @@ stdenv.mkDerivation rec {
   preBuild = ''
     export LD="${aflplusplus}/bin/afl-ld-lto"
     export AFL_LLVM_CMPLOG=1
-    unset AFL_USE_ASAN
-    unset AFL_USE_UBSAN
+    # ENABLE sanitizers for bug detection
+    export AFL_USE_ASAN=1
+    export AFL_USE_UBSAN=1
+    # Suppress leak detection during build (bootstrap binaries may leak)
+    export ASAN_OPTIONS="detect_leaks=0"
   '';
 
   makeFlags = [
@@ -59,9 +62,11 @@ stdenv.mkDerivation rec {
     "CP=cp"
     "RM=rm"
     "PDFTEX=echo"
-    "CC=${aflplusplus}/bin/afl-clang-lto++ -O3 -I./catalogs -W -Wall -Wno-error -Wno-register"
+    # AFL++ LTO instrumentation with ASAN+UBSAN and preserved application flags
+    "CC=${aflplusplus}/bin/afl-clang-lto++ -static-libsan -O3 -I./catalogs -W -Wall -Wno-error -Wno-register"
     "CXX=${aflplusplus}/bin/afl-clang-lto++"
     "LD=${aflplusplus}/bin/afl-ld-lto"
+    "LINKFLAGS=-s -static-libsan"
     "AR=${libllvm}/bin/llvm-ar"
     "RANLIB=${libllvm}/bin/llvm-ranlib"
     "AS=${libllvm}/bin/llvm-as"
@@ -78,7 +83,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     inherit (src.meta) homepage;
-    description = "Literate Programming in C/C++";
+    description = "Literate Programming in C/C++ (ASAN+UBSAN instrumented)";
     platforms = with lib.platforms; unix;
     maintainers = [ ];
     license = lib.licenses.abstyles;

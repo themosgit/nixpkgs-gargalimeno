@@ -4,10 +4,30 @@
   fetchFromGitHub,
   perl,
   libxcb,
+  xorg,
   aflplusplus,
   libllvm,
 }:
 
+let
+  libXau-static = xorg.libXau.overrideAttrs (old: {
+    configureFlags = (old.configureFlags or []) ++ [ "--enable-static" ];
+    dontDisableStatic = true;
+  });
+
+  libXdmcp-static = xorg.libXdmcp.overrideAttrs (old: {
+    configureFlags = (old.configureFlags or []) ++ [ "--enable-static" ];
+    dontDisableStatic = true;
+  });
+
+  libxcb-static = (libxcb.override {
+    libxau = libXau-static;
+    libxdmcp = libXdmcp-static;
+  }).overrideAttrs (old: {
+    configureFlags = (old.configureFlags or []) ++ [ "--enable-static" ];
+    dontDisableStatic = true;
+  });
+in
 stdenv.mkDerivation rec {
   pname = "lemonbar-asan";
   version = "1.5";
@@ -24,12 +44,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ aflplusplus libllvm ];
 
   buildInputs = [
-    libxcb
+    libxcb-static
+    libXau-static
+    libXdmcp-static
     perl
   ];
 
-  preConfigure = ''
+  preBuild = ''
     export LD="${aflplusplus}/bin/afl-ld-lto"
+    export AFL_LLVM_CMPLOG=1
+    # ENABLE sanitizers for bug detection
+    export AFL_USE_ASAN=1
+    export AFL_USE_UBSAN=1
+    # Suppress leak detection during build (bootstrap may leak)
+    export ASAN_OPTIONS="detect_leaks=0"
   '';
 
   makeFlags = [
@@ -39,14 +67,10 @@ stdenv.mkDerivation rec {
     "AR=${libllvm}/bin/llvm-ar"
     "RANLIB=${libllvm}/bin/llvm-ranlib"
     "AS=${libllvm}/bin/llvm-as"
-    "AFL_LLVM_CMPLOG=1"
-    "AFL_USE_ASAN=1"
-    "AFL_USE_UBSAN=1"
-    "CFLAGS=-Wno-error"
-    "CXXFLAGS=-Wno-error"
+    "CFLAGS=-static-libsan -DVERSION=\\\"${version}\\\" -D_GNU_SOURCE -Wno-error"
+    "CXXFLAGS=-static-libsan -DVERSION=\\\"${version}\\\" -D_GNU_SOURCE -Wno-error"
+    "LDFLAGS=-static-libsan ${libxcb-static}/lib/libxcb.a ${libxcb-static}/lib/libxcb-xinerama.a ${libxcb-static}/lib/libxcb-randr.a ${libXau-static}/lib/libXau.a ${libXdmcp-static}/lib/libXdmcp.a"
   ];
-
-  configureFlags = [ "--disable-shared" "--enable-static" ];
 
   installFlags = [
     "DESTDIR=$(out)"
