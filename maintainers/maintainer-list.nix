@@ -1599,6 +1599,13 @@
     githubId = 754494;
     name = "Anders Asheim Hennum";
   };
+  anderscs = {
+    email = "anders@sorby.xyz";
+    github = "anderssorby";
+    githubId = 6331075;
+    matrix = "@anders:sorby.xyz";
+    name = "Anders C. Sørby";
+  };
   andershus = {
     email = "anders.husebo@eviny.no";
     github = "andershus";
@@ -5734,6 +5741,13 @@
     githubId = 13945563;
     matrix = "@Dan:matrix.org";
     name = "Daniel Theriault";
+  };
+  danberdev = {
+    email = "me@danber.dev";
+    github = "danberdev";
+    githubId = 13893528;
+    name = "Daniil Berendeev";
+    keys = [ { fingerprint = "60D7 0EE0 3BD4 A415 B255  1938 6556 0668 006B 4906"; } ];
   };
   danbst = {
     email = "abcz2.uprola@gmail.com";
@@ -10191,7 +10205,7 @@
   };
   HarisDotParis = {
     name = "Haris";
-    email = "nix.dev@haris.paris";
+    email = "git@haris.paris";
     matrix = "@haris:haris.paris";
     github = "HarisDotParis";
     githubId = 67912527;
@@ -13331,6 +13345,12 @@
     githubId = 386765;
     matrix = "@k900:0upti.me";
   };
+  kaasboteram = {
+    name = "Luuk Machielse";
+    github = "kaasboteram";
+    githubId = 168290368;
+    email = "luuk.machielse@gmail.com";
+  };
   kachick = {
     email = "kachick1@gmail.com";
     github = "kachick";
@@ -13508,6 +13528,11 @@
     github = "kcalvinalvin";
     githubId = 37185887;
     name = "Calvin Kim";
+  };
+  kedry = {
+    name = "Kevin Edry";
+    github = "kedry";
+    githubId = 12020122;
   };
   keegancsmith = {
     email = "keegan.csmith@gmail.com";
@@ -18140,6 +18165,12 @@
     matrix = "@nhp:matrix.org";
     github = "nadiaholmquist";
     githubId = 893884;
+  };
+  Nadim147c = {
+    email = "theephemeral.txt@gmail.com";
+    github = "Nadim147c";
+    githubId = 90786729;
+    name = "Ephemeral";
   };
   nadir-ishiguro = {
     github = "nadir-ishiguro";
@@ -23050,6 +23081,11 @@
     github = "ryneeverett";
     githubId = 3280280;
     name = "Ryne Everett";
+  };
+  ryoppippi = {
+    github = "ryoppippi";
+    githubId = 1560508;
+    name = "ryoppippi";
   };
   ryota-ka = {
     email = "ok@ryota-ka.me";

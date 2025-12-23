@@ -478,6 +478,8 @@ self: super: with self; {
 
   aiosasl = callPackage ../development/python-modules/aiosasl { };
 
+  aiosendspin = callPackage ../development/python-modules/aiosendspin { };
+
   aiosenz = callPackage ../development/python-modules/aiosenz { };
 
   aioserial = callPackage ../development/python-modules/aioserial { };
@@ -535,6 +537,8 @@ self: super: with self; {
   aiounittest = callPackage ../development/python-modules/aiounittest { };
 
   aiousbwatcher = callPackage ../development/python-modules/aiousbwatcher { };
+
+  aiovban = callPackage ../development/python-modules/aiovban { };
 
   aiovlc = callPackage ../development/python-modules/aiovlc { };
 
@@ -6727,6 +6731,8 @@ self: super: with self; {
 
   hatch-babel = callPackage ../development/python-modules/hatch-babel { };
 
+  hatch-build-scripts = callPackage ../development/python-modules/hatch-build-scripts { };
+
   hatch-deps-selector = callPackage ../development/python-modules/hatch-deps-selector { };
 
   hatch-docstring-description =
@@ -8659,6 +8665,10 @@ self: super: with self; {
 
   libvirt = callPackage ../development/python-modules/libvirt { inherit (pkgs) libvirt; };
 
+  libxc = callPackage ../by-name/li/libxc/python.nix {
+    libxc = pkgs.libxc_7;
+  };
+
   libxml2 =
     (toPythonModule (
       pkgs.libxml2.override {
@@ -9916,6 +9926,8 @@ self: super: with self; {
 
   monzopy = callPackage ../development/python-modules/monzopy { };
 
+  moocore = callPackage ../development/python-modules/moocore { };
+
   moonraker-api = callPackage ../development/python-modules/moonraker-api { };
 
   mopeka-iot-ble = callPackage ../development/python-modules/mopeka-iot-ble { };
@@ -9995,8 +10007,6 @@ self: super: with self; {
   mpltoolbox = callPackage ../development/python-modules/mpltoolbox { };
 
   mpmath = callPackage ../development/python-modules/mpmath { };
-
-  mpris-server = callPackage ../development/python-modules/mpris-server { };
 
   mprisify = callPackage ../development/python-modules/mprisify { };
 
@@ -12644,8 +12654,6 @@ self: super: with self; {
 
   ptyprocess = callPackage ../development/python-modules/ptyprocess { };
 
-  publicsuffix = callPackage ../development/python-modules/publicsuffix { };
-
   publicsuffix2 = callPackage ../development/python-modules/publicsuffix2 { };
 
   publicsuffixlist = callPackage ../development/python-modules/publicsuffixlist { };
@@ -13012,6 +13020,8 @@ self: super: with self; {
   pybullet = callPackage ../development/python-modules/pybullet { };
 
   pycairo = callPackage ../development/python-modules/pycairo { inherit (pkgs.buildPackages) meson; };
+
+  pycambia = callPackage ../development/python-modules/pycambia { };
 
   pycangjie = callPackage ../development/python-modules/pycangjie {
     inherit (pkgs.buildPackages) meson;
@@ -13968,6 +13978,8 @@ self: super: with self; {
 
   pynina = callPackage ../development/python-modules/pynina { };
 
+  pynintendoauth = callPackage ../development/python-modules/pynintendoauth { };
+
   pynintendoparental = callPackage ../development/python-modules/pynintendoparental { };
 
   pynipap = callPackage ../development/python-modules/pynipap { };
@@ -14107,6 +14119,8 @@ self: super: with self; {
   pyowm = callPackage ../development/python-modules/pyowm { };
 
   pyoxigraph = callPackage ../development/python-modules/pyoxigraph { };
+
+  pyoxipng = callPackage ../development/python-modules/pyoxipng { };
 
   pypager = callPackage ../development/python-modules/pypager { };
 
@@ -16785,6 +16799,8 @@ self: super: with self; {
 
   sarif-tools = callPackage ../development/python-modules/sarif-tools { };
 
+  sasdata = callPackage ../development/python-modules/sasdata { };
+
   sasmodels = callPackage ../development/python-modules/sasmodels { };
 
   sat-tmp = callPackage ../development/python-modules/sat-tmp { };
@@ -18496,6 +18512,8 @@ self: super: with self; {
   };
 
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
+
+  tccbox = callPackage ../development/python-modules/tccbox { };
 
   tcolorpy = callPackage ../development/python-modules/tcolorpy { };
 
